@@ -749,10 +749,14 @@ export default class FlowChartFactory {
     pathList
       .attr('stroke-width', '5')
 
-    const marker = d3
-      .select(pathId)
-      .select('defs > marker')
+    const marker =
+      d3
+        .select(this.root)
+        .select(pathId)
+        .select('defs > marker')
+
     d3
+      .select(this.root)
       .select(pathId)
       .select('path')
       .transition()
