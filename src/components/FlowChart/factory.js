@@ -230,6 +230,11 @@ export default class FlowChartFactory {
     })
     const nodeDataSet = this.nodeStack.getNodeAtTop()
 
+    if (
+      !nodeDataSet ||
+      !nodeDataSet.nodes
+    ) return
+
     // 添加节点
     nodeDataSet.nodes.forEach(node => {
       const element = this.getGraphCustomNode(node, FlowChartNode)
@@ -284,8 +289,22 @@ export default class FlowChartFactory {
    *
    */
   getDifferenceBeforeAndAfterEdge () {
-    const firstSet = this.nodeStack.getNodeAtTop()
-    const secondSet = this.nodeStack.getNodeAtSecondTop()
+    const firstSet = JSON.parse(JSON.stringify(this.nodeStack.getNodeAtTop()))
+    const secondSet = JSON.parse(JSON.stringify(this.nodeStack.getNodeAtSecondTop()))
+
+    // 忽略 label
+    firstSet.edges = firstSet.edges.map(edge => {
+      return {
+        source: edge.source,
+        target: edge.target
+      }
+    })
+    secondSet.edges = secondSet.edges.map(edge => {
+      return {
+        source: edge.source,
+        target: edge.target
+      }
+    })
 
     if (!firstSet || !secondSet) {
       return []
@@ -844,7 +863,8 @@ export default class FlowChartFactory {
   combineVirtualRoutes (range = []) {
     const id = `v-output-${uuidv4()}`
     const pathList = this.getPathListByNodesId(range)
-    console.log(pathList.nodes())
+    // TODO: 小球运动的节点路径
+    // console.log(pathList.nodes())
     if (!pathList.node()) {
       return
     }
@@ -926,7 +946,7 @@ export default class FlowChartFactory {
     Vue.nextTick(() => {
       vGroup
         .append('circle')
-        .attr('fill', '#ff7d60')
+        .attr('fill', '#f24582')
         .attr('r', 10)
         .transition()
         .duration(5000)
@@ -1032,7 +1052,7 @@ class AnimationBall {
   constructor (container, duration = 3000, color) {
     this.container = container
     this.duration = duration
-    this.color = color || '#0ee'
+    this.color = color || '#f24582'
 
     this.circle = null
 
@@ -1075,8 +1095,7 @@ class AnimationBall {
         this.circle = this.container.append('circle')
       }
       this.circle
-        .attr('fill', '#ff7d60')
-        // .attr('fill', this.color)
+        .attr('fill', this.color)
         .attr('r', 8)
         .transition()
         .duration(
