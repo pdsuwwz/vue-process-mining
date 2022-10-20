@@ -27,7 +27,7 @@ module.exports = {
         "normal": "never",
         "component": "always"
       },
-      "svg": "always",
+      "svg": "never",
       "math": "always"
     }]
   }

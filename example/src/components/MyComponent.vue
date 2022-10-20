@@ -4,7 +4,7 @@
   >
     <svg
       ref="container"
-    />
+    ></svg>
   </div>
 </template>
 
